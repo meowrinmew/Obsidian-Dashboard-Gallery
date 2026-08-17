@@ -1,0 +1,126 @@
+/* ===== Transparent buttons + softer shadows (patch) ===== */
+
+:root {
+  /* softer global shadow for light-mode float (overrides original, set late so it wins) */
+  --komo-shadow: 0 6px 14px rgba(0,0,0,0.08);
+  --komo-shadow-press: 0 3px 8px rgba(0,0,0,0.06);
+  --komo-border-frost: rgba(255,255,255,0.08);
+}
+
+/* Make interactive panels/buttons visually transparent but keep a frosted float */
+.komo-act-btn,
+.komo-add-card-btn,
+.komo-related-card,
+.komo-card,
+.komo-pill,
+.komo-playlist-wrap,
+.komo-music-player .komo-spotify-container,
+.komo-cal-popup,
+.komo-card-action,
+.komo-local-ctrl,
+.komo-local-ctrl-main {
+  /* transparent base so the underlying page color shows through */
+  background: transparent !important;
+
+  /* subtle frosted border so elements still read as glass */
+  border: 1px solid var(--komo-border-frost) !important;
+
+  /* keep mild blur for glass effect */
+  -webkit-backdrop-filter: blur(6px) saturate(115%) !important;
+  backdrop-filter: blur(6px) saturate(115%) !important;
+
+  /* softer float shadow */
+  box-shadow: var(--komo-shadow) !important;
+  transition: box-shadow 160ms ease, transform 120ms ease, background 120ms ease !important;
+  color: var(--komo-text) !important;
+}
+
+/* Hover states: small lift and subtle tint (still mostly transparent) */
+.komo-act-btn:hover,
+.komo-add-card-btn:hover,
+.komo-related-card:hover,
+.komo-card:hover,
+.komo-pill:hover,
+.komo-playlist-btn:hover,
+.komo-local-ctrl:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.09) !important;
+  /* gentle accent so interactive items still feel responsive */
+  background: rgba(245,194,231,0.03) !important;
+  border-color: rgba(245,194,231,0.12) !important;
+}
+
+/* Active / pressed state: reduce shadow and push down */
+.komo-act-btn:active,
+.komo-add-card-btn:active,
+.komo-local-ctrl:active {
+  transform: translateY(0) !important;
+  box-shadow: var(--komo-shadow-press) !important;
+  background: rgba(245,194,231,0.04) !important;
+}
+
+/* Ensure small square controls (pomodoro / music) get the same transparent treatment and sizing */
+.komo-pomo-btn,
+.komo-pomo-btn-primary,
+.komo-local-ctrl,
+.komo-local-ctrl-main {
+  background: transparent !important;
+  border: 1px solid var(--komo-border-frost) !important;
+  box-shadow: var(--komo-shadow) !important;
+}
+
+/* Preserve the stacked layout for the quick-action tiles */
+.komo-act-grid .komo-act-btn {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Bio / thin progress bars: make more visible but still light */
+.komo-bio-bar-wrap {
+  background: linear-gradient(90deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06)) !important;
+  box-shadow: inset 0 -2px 6px rgba(0,0,0,0.06) !important;
+  height: 4px !important;
+}
+
+/* Light-mode tweak: add a faint white wash on top of the transparent backgrounds so things blend subtly */
+@media (prefers-color-scheme: light) {
+  .komo-act-btn,
+  .komo-add-card-btn,
+  .komo-related-card,
+  .komo-card,
+  .komo-pill,
+  .komo-playlist-wrap,
+  .komo-music-player .komo-spotify-container,
+  .komo-cal-popup {
+    background: rgba(255,255,255,0.02) !important; /* barely visible wash */
+    border: 1px solid rgba(0,0,0,0.04) !important; /* slightly darker border to define edges in light bg */
+    box-shadow: 0 6px 14px rgba(0,0,0,0.06) !important; /* even softer in bright contexts */
+  }
+
+  .komo-act-btn:hover,
+  .komo-add-card-btn:hover {
+    background: rgba(245,194,231,0.04) !important;
+  }
+}
+
+/* Dark-mode tweak: keep contrast but still soft */
+@media (prefers-color-scheme: dark) {
+  :root { --komo-border-frost: rgba(255,255,255,0.06); }
+  .komo-act-btn,
+  .komo-add-card-btn,
+  .komo-related-card,
+  .komo-card {
+    background: rgba(255,255,255,0.02) !important;
+    border: 1px solid rgba(255,255,255,0.06) !important;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.32) !important;
+  }
+}
+
+/* Small-screen fallback: keep add button inline */
+@media (max-width: 900px) {
+  .komo-cards-hdr .komo-add-card-btn { position: static !important; margin-left: auto !important; margin-top: 6px !important; }
+}
+
+/* End of transparent-buttons + soft shadows patch */
